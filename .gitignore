@@ -43,3 +43,6 @@ luac.out
 
 # Custom
 love-0.10.2-win32*
+
+# Love2D
+*.love
