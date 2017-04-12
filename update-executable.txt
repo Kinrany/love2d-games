@@ -1,0 +1,7 @@
+setlocal
+set name=sketch1
+# contains an extra backslash
+set mypath=%~dp0
+copy /b "%mypath%love-0.10.2-win32\love.exe"+"%mypath%%name%.love" "%mypath%love-0.10.2-win32\%name%.exe"
+mklink "%mypath%%name%.exe" "%mypath%love-0.10.2-win32\%name%.exe"
+pause
