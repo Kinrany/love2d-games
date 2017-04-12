@@ -1,17 +1,27 @@
-$name = "sketch1"
-$dotlove = "$name.love"
-$tempdir = "$name-distrib"
-$engine = "love-0.10.2-win32"
+$engineFolderName = "love-0.10.2-win32"
+$engineFolderPath = Join-Path $PSScriptRoot $engineFolderName
+
+$gameFolderName = "sketch1"
+$gameFolderPath = Join-Path $PSScriptRoot $gameFolderName
+
+$gameZipName = "$gameFolderName.love"
+$gameZipPath = Join-Path $PSScriptRoot $gameZipName
+
+$gameReleaseFolderName = "$gameFolderName-temporary"
+$gameReleaseFolderPath = Join-Path $PSScriptRoot $gameReleaseFolderName
 
 # convert game folder into .love file
-Get-ChildItem $name -Recurse | write-zip -OutputPath $dotlove -EntryPathRoot $name -IncludeEmptyDirectories
+#Get-ChildItem $gameFolderPath -Recurse | write-zip -OutputPath $gameZipPath -EntryPathRoot $gameFolderPath -IncludeEmptyDirectories
+Add-Type -Assembly System.IO.Compression.FileSystem
+$compressionLevel = [System.IO.Compression.CompressionLevel]::Fastest
+[System.IO.Compression.ZipFile]::CreateFromDirectory($gameFolderPath, $gameZipPath, $compressionLevel, $false)
 
 # create new empty directory
-new-item -Type "directory" -Name $tempdir -Force
-remove-item "$tempdir/*" -Recurse
+New-Item -Type "directory" -Path $gameReleaseFolderPath -Force
+Remove-Item "$gameReleaseFolderPath/*" -Recurse
 
-# add game engine and .love file to the directory
-copy-item $engine "$tempdir/$engine" -Recurse
-move-item $dotlove $tempdir
+# add game .love file to the directory
+Copy-Item $engineFolderPath "$gameReleaseFolderPath/$engineFolderName" -Recurse
+Move-Item $gameZipPath $gameReleaseFolderPath
 
 # create executable of some sort?
