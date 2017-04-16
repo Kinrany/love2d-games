@@ -5,11 +5,18 @@ _G.__      = require "lib/underscore"
 Bump = require "lib/bump"
 bump_world = Bump.newWorld()
 
-local Player = require "player"
-local player = Player.new(bump_world)
+local Character = require "character"
+local PlayerBrain  = require "playerbrain"
+local player = Character.new(bump_world)
+player.brain = PlayerBrain.new()
 
-local Brain  = require "brain"
-player.brain = Brain.new()
+local AIBrain = require "aibrain"
+local ai = Character.new()
+ai.x = 200
+ai.y = 100
+ai.color = {192, 64, 64}
+ai:set_bump_world(bump_world)
+ai.brain = AIBrain.new()
 
 Camera = require "lib/hump/camera"
 camera = Camera.new()
@@ -20,6 +27,7 @@ end
 
 function love.update()
 	player:update()
+	ai:update()
 	
 	camera:lookAt(player.sprite:get_center())
 end
@@ -27,13 +35,13 @@ end
 
 function love.draw()
 	love.graphics.setBackgroundColor(255, 255, 255)
-	
 	camera:attach()
 	
 	love.graphics.setColor(128, 64, 192)
 	love.graphics.rectangle("line", 0, 0, 100, 100)
 	
 	player:draw()
+	ai:draw()
 	
 	camera:detach()
 	
@@ -45,7 +53,12 @@ function love.draw()
 		offset = offset + 12
 	end
 	
+	write_line("Player:")
 	write_line{player.sprite:get_xywh()}
+	write_line{player.brain:get_input()}
+	write_line("AI:")
+	write_line{ai.sprite:get_xywh()}
+	write_line{ai.brain:get_input()}
 end
 
 

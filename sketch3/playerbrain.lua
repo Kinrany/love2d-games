@@ -34,10 +34,10 @@ end
 
 
 
-local Brain = {}
+local PlayerBrain = {}
 
-function Brain.new() 
+function PlayerBrain.new() 
 	return setmetatable({}, {__index = prototype})
 end
 
-return Brain
+return PlayerBrain

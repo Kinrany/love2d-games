@@ -2,7 +2,8 @@ local Sprite = require "sprite"
 
 
 local prototype = {
-	speed = 3
+	speed = 3,
+	color = {64, 192, 64}
 }
 
 function prototype.move(self, dx, dy)
@@ -10,8 +11,26 @@ function prototype.move(self, dx, dy)
 	local sprite = self.sprite
 	
 	local goalX, goalY = sprite.x + dx, sprite.y + dy
-	local actualX, actualY = world:move(self, goalX, goalY, nil)
+	local actualX, actualY
+	if world then
+		actualX, actualY = world:move(self, goalX, goalY, nil)
+	else
+		actualX, actualY = goalX, goalY
+	end
+	
 	sprite:set_xywh(actualX, actualY)
+end
+
+function prototype.set_bump_world(self, bump_world)
+	if self.bump_world then
+		self.bump_world:remove(self)
+		self.bump_world = nil
+	end
+	
+	if bump_world then
+		bump_world:add(self, self.sprite:get_xywh())
+		self.bump_world = bump_world
+	end
 end
 
 function prototype.update(self)
@@ -36,31 +55,31 @@ function prototype.update(self)
 end
 
 function prototype.draw(self)
-	love.graphics.setColor(64, 192, 64)
+	love.graphics.setColor(unpack(self.color))
 	love.graphics.rectangle("fill", self.sprite:get_xywh())
 end
 
 function prototype.destroy(self)
-	self.bump_world:remove(self)
+	self:set_bump_world(nil)
 end
 
 
 
-local Player = {}
+local Character = {}
 
-function Player.new(bump_world)
+function Character.new(bump_world)
 	local sprite = Sprite.new()
 	sprite.w = 30
 	sprite.h = 50
 	
-	local player = {
-		sprite = sprite,
-		bump_world = bump_world
+	local character = {
+		sprite = sprite
 	}
+	setmetatable(character, {__index = prototype})
 	
-	bump_world:add(player, sprite:get_xywh())
+	character:set_bump_world(bump_world)
 	
-	return setmetatable(player, {__index = prototype})
+	return character
 end
 
-return Player
+return Character
