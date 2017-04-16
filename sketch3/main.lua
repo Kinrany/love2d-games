@@ -22,7 +22,7 @@ Camera = require "lib/hump/camera"
 camera = Camera.new()
 
 function love.load()
-	
+	love.window.setTitle("Brains")
 end
 
 function love.update()
