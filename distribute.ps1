@@ -33,7 +33,8 @@ Move-Item $gameZipPath $gameReleaseFolderPath
 # add to the temp directory and run update-executable.bat
 $updateExecutableBatPath = "$gameReleaseFolderPath/$updateExecutableName.bat"
 Copy-Item $updateExecutablePath $updateExecutableBatPath
-. $updateExecutableBatPath
+# commented out since zipping symlinks doesn't work yet
+#. $updateExecutableBatPath
 
 # create a .zip archive of the temp directory
 $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
