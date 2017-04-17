@@ -1,6 +1,5 @@
 A repository for my Love2D games. 
 
-Will include scripts for easy packaging. I failed to employ any of the existing solutions, 
-so I'll just package my code with a portable win32 version of Love2D.
+Every game has it's own branch; master branch contains shared libraries and distribution scripts.
 
-
+Launching `distribute.bat` will create a .zip with a portable win32 copy of love2d, a .love file with all the source code, and `update-executable.bat` which can be used to create a convenient executable.
