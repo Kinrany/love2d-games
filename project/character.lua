@@ -12,7 +12,9 @@ Character.static.speed = 1
 
 function Character.initialize(self, x, y, bump_world)
 	self.box = Box:new(x or 0, y or 0, self.class.width, self.class.height)
-	self.bumper = Bumper:new(self.box, bump_world)
+	self.bumper = Bumper:new(
+		self, self.box, 
+		{world=bump_world, handler=collision_handler})
 	self.brain = nil
 end
 
@@ -37,6 +39,12 @@ function Character.update(self)
 		
 		self.bumper:move(self.box.x + dx, self.box.y + dy)
 	end
+end
+
+function collision_handler(item, other, collision)
+	local item_name = tostring(item:get_owner())
+	local other_name = tostring(other:get_owner())
+	--print(item_name.." collided with "..other_name)
 end
 
 Character:include(Drawable)

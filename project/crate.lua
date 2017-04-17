@@ -11,7 +11,9 @@ Crate.static.color = Color:new(247, 134, 22)
 
 function Crate.initialize(self, x, y, bump_world)
 	self.box = Box:new(x or 0, y or 0, self.class.width, self.class.height)
-	self.bumper = Bumper:new(self.box, bump_world)
+	self.bumper = Bumper:new(
+		self, self.box, 
+		{world=bump_world})
 end
 
 Crate:include(Drawable)
