@@ -23,6 +23,8 @@ end
 
 
 function love.load()
+	
+	-- create crates along the borders
 	local num = 15
 	for i = 1, num do
 		local x = 10 + (love.graphics.getWidth() - 20 - Crate.width) / (num - 1) * (i - 1)
@@ -39,44 +41,42 @@ function love.load()
 		add_object(Crate, x1, y, bump_world)
 		add_object(Crate, x2, y, bump_world)
 	end
+	
+	-- create player character in the middle
+	local w, h = love.graphics.getDimensions()
+	local x, y = w/2 - Character.width/2, h/2 - Character.height/2
+	add_object(PlayerCharacter, x, y, bump_world)
 end
 
 local mouse_debounce = true
 function love.update()
-	for i, object in ipairs(objects) do
+	
+	-- update all objects
+	__.each(objects, function(object)
 		if object.update then
 			object:update()
 		end
-	end
+	end)
+end
+
+function love.mousepressed(x, y, button)
 	
-	local x, y = love.mouse.getPosition()
-	if love.mouse.isDown(1) then
-		if mouse_debounce then
-			mouse_debounce = false
-			
-			x, y = x - Character.width/2, y - Character.height/2
-			add_object(AICharacter, x, y, bump_world)
-		end
-	elseif love.mouse.isDown(2) then
-		if mouse_debounce then
-			mouse_debounce = false
-			
-			x, y = x - Character.width/2, y - Character.height/2
-			add_object(PlayerCharacter, x, y, bump_world)
-		end
-	else
-		mouse_debounce = true
+	-- on RMB click create an AI character
+	if button == 2 then
+		x, y = x - Character.width/2, y - Character.height/2
+		add_object(AICharacter, x, y, bump_world)
 	end
 end
 
 function love.draw()
 	love.graphics.setBackgroundColor(192, 255, 192)
 	
-	for i, object in ipairs(objects) do
+	-- draw all objects
+	__.each(objects, function(object)
 		if object.draw then
 			object:draw()
 		end
-	end
+	end)
 	
 	love.graphics.setColor(0, 0, 0)
 	love.graphics.print("Objects: " .. #objects, 0, 0)
