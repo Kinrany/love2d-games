@@ -1,9 +1,3 @@
-_G.Inspect = require "lib/inspect"
-_G.Memoize = require "lib/memoize"
-_G.Class   = require "lib/middleclass"
-_G.__      = require "lib/underscore"
-
-
 local Bump = require "lib/bump"
 local bump_world = Bump.newWorld()
 
@@ -50,6 +44,8 @@ end
 
 local mouse_debounce = true
 function love.update()
+	-- lovebird console
+	Lovebird.update()
 	
 	-- update all objects
 	__.each(objects, function(object)
