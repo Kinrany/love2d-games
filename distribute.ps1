@@ -40,4 +40,6 @@ $compressionLevel = [System.IO.Compression.CompressionLevel]::Optimal
 # TODO: preserve symlinks
 [System.IO.Compression.ZipFile]::CreateFromDirectory($gameReleaseFolderPath, $gameReleaseZipPath, $compressionLevel, $false)
 
-# TODO: remove temp directory
+# remove temp directory
+Remove-Item $gameReleaseFolderPath -Recurse
+
