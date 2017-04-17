@@ -1,7 +1,7 @@
 $engineFolderName = "love-0.10.2-win32"
 $engineFolderPath = Join-Path $PSScriptRoot $engineFolderName
 
-$gameFolderName = "sketch1"
+$gameFolderName = "project"
 $gameFolderPath = Join-Path $PSScriptRoot $gameFolderName
 
 $gameZipName = "$gameFolderName.love"
