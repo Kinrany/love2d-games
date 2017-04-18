@@ -18,4 +18,18 @@ function Box.unpack(self)
 	return self.x, self.y, self.w, self.h
 end
 
+function Box.center(self)
+	return self.x + self.w/2, self.y + self.h/2
+end
+
+function Box.__index(self, key)
+	if     key == "centerX"  then return self.x + self.w/2
+	elseif key == "centerY"  then return                    self.y + self.h/2
+	elseif key == "left"     then return self.x
+	elseif key == "right"    then return self.x + self.w
+	elseif key == "top"      then return                    self.y
+	elseif key == "bottom"   then return                    self.y + self.h
+	end
+end
+
 return Box
