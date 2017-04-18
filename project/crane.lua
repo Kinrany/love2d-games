@@ -47,7 +47,7 @@ function Crane.draw(self)
 	
 	-- draw knot
 	love.graphics.setColor(Crane.color2)
-	love.graphics.circle("fill", knotX, knotY-5, Crane.knot_radius)
+	love.graphics.circle("fill", knotX, knotY+5, Crane.knot_radius)
 	
 	-- debug output
 	love.graphics.setColor(0, 0, 0)
