@@ -5,6 +5,7 @@ local Crate           = require "crate"
 local Character       = require "character"
 local PlayerCharacter = require "player_character"
 local AICharacter     = require "ai_character"
+local Crane           = require "crane"
 
 
 local objects = {}
@@ -17,6 +18,8 @@ end
 
 
 function love.load()
+	-- hide mouse
+	love.mouse.setVisible(false)
 	
 	-- create crates along the borders
 	local num = 15
@@ -36,10 +39,13 @@ function love.load()
 		add_object(Crate, x2, y, bump_world)
 	end
 	
-	-- create player character in the middle
+	-- create a crane in the middle
 	local w, h = love.graphics.getDimensions()
-	local x, y = w/2 - Character.width/2, h/2 - Character.height/2
-	add_object(PlayerCharacter, x, y, bump_world)
+	local x, y = w/2 - Crane.base_width/2, h/2 - Crane.base_height/2
+	add_object(Crane, x, y, bump_world)
+	
+	-- create playe character
+	add_object(PlayerCharacter, 200, 200, bump_world)
 end
 
 local mouse_debounce = true
@@ -59,7 +65,7 @@ function love.mousepressed(x, y, button)
 	
 	-- on RMB click create an AI character
 	if button == 2 then
-		x, y = x - Character.width/2, y - Character.height/2
+		x, y = x - Character.width/2, y
 		add_object(AICharacter, x, y, bump_world)
 	end
 end
@@ -67,6 +73,16 @@ end
 function love.draw()
 	love.graphics.setBackgroundColor(192, 255, 192)
 	
+	-- sort objects by Y coordinate
+	table.sort(objects, function(a, b) 
+		if a.class.name == 'Crane' then
+			return false
+		elseif b.class.name == 'Crane' then
+			return true
+		else
+			return a.box.bottom < b.box.bottom 
+		end
+	end)
 	-- draw all objects
 	__.each(objects, function(object)
 		if object.draw then
