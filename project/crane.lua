@@ -48,13 +48,6 @@ function Crane.draw(self)
 	-- draw knot
 	love.graphics.setColor(Crane.color2)
 	love.graphics.circle("fill", knotX, knotY+5, Crane.knot_radius)
-	
-	-- debug output
-	love.graphics.setColor(0, 0, 0)
-	love.graphics.print("Shoulder: "..sh                        , 200, 0)
-	love.graphics.print("dxdy: "    ..dx          ..", "..dy    , 200, 12)
-	love.graphics.print("Knot: "    ..knotX       ..", "..knotY , 200, 24)
-	love.graphics.print("Height: "  ..knot_height               , 200, 36)
 end
 
 function Crane.__index(self, key)
