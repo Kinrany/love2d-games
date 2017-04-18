@@ -1,12 +1,15 @@
+local Vector = require "lib/hump/vector-light"
+
 local Box    = require "box"
 local Bumper = require "bumper"
 local Color  = require "color"
+local Crate  = require "crate"
 
 local Crane = Class('Crane')
 
 Crane.static.base_width = 60
 Crane.static.base_height = 40
-Crane.static.shoulder = 300
+Crane.static.shoulder = 250
 Crane.static.knot_radius = 10
 Crane.static.hand_radius = 15
 Crane.static.color1 = Color(255, 165, 0)
@@ -20,11 +23,12 @@ end
 
 function Crane.draw(self)
 	local mouseX, mouseY = love.mouse.getPosition()
+	
 	local boxX, boxY = self.base_box:center()
 	local dx, dy = mouseX - boxX, mouseY - boxY
 	
 	local sh = Crane.shoulder
-	local knot_height = math.sqrt(sh*sh - (dx*dx + dy*dy)/4)
+	local knot_height = math.sqrt(sh*sh - Vector.len2(dx, dy)/4)
 	local knotX, knotY = boxX + dx/2, boxY + dy/2 - knot_height
 	
 	-- draw first shoulder

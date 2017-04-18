@@ -23,18 +23,19 @@ function love.load()
 	
 	-- create crates along the borders
 	local num = 15
+	local offset = 5
 	for i = 1, num do
-		local x = 10 + (love.graphics.getWidth() - 20 - Crate.width) / (num - 1) * (i - 1)
-		local y1 = 10
-		local y2 = love.graphics.getHeight() - Crate.height - 10
+		local x = offset + (love.graphics.getWidth() - offset*2 - Crate.width) / (num - 1) * (i - 1)
+		local y1 = offset
+		local y2 = love.graphics.getHeight() - Crate.height - offset
 		add_object(Crate, x, y1, bump_world)
 		add_object(Crate, x, y2, bump_world)
 	end
 	local num = 12
 	for i = 2, num-1 do
-		local y = 10 + (love.graphics.getHeight() - 20 - Crate.height) / (num - 1) * (i - 1)
-		local x1 = 10
-		local x2 = love.graphics.getWidth() - Crate.width - 10
+		local y = offset + (love.graphics.getHeight() - offset*2 - Crate.height) / (num - 1) * (i - 1)
+		local x1 = offset
+		local x2 = love.graphics.getWidth() - Crate.width - offset
 		add_object(Crate, x1, y, bump_world)
 		add_object(Crate, x2, y, bump_world)
 	end
@@ -93,4 +94,5 @@ function love.draw()
 	love.graphics.setColor(0, 0, 0)
 	love.graphics.print("Objects: " .. #objects, 0, 0)
 	love.graphics.print("Mouse: "..love.mouse.getX()..", "..love.mouse.getY(), 0, 12)
+	love.graphics.print("Press RMB to spawn an AI", 0, 36)
 end
