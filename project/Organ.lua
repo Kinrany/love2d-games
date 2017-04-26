@@ -11,17 +11,24 @@ Organ.static._connections = TwoMap("host", "listener")
 -- fired axons
 -- key   == axon id
 -- value == data
-Organ.static._fired = {}
+local fired_axons = {}
+
+function Organ.initialize(self, stimulation_handlers)
+	self._stimulation_handlers = stimulation_handlers or {}
+end
 
 function Organ.static._add_fired(host_axon_id, data)
-	Organ.fired[host_axon_id] = data
+	data = data or false
+	fired_axons[host_axon_id] = data
 end
 
 function Organ.static.process_fired()
 	
-	-- replace static Organ._fired with empty table
-	local fired;
-	fired, Organ._fired = Organ._fired, {}
+	-- replace global fired_axons with empty table
+	local fired = fired_axons
+	fired_axons = {}
+	
+	local connections = Organ._connections
 	
 	for host_axon_id, data in pairs(fired) do
 		-- stimulate every listening axon
@@ -34,8 +41,6 @@ function Organ.static.process_fired()
 end
 
 function Organ.static.connect(organ, axon, host, host_axon)
-	-- add connection to twomap
-	-- using axon ids
 	local listener_id = Axons.get_id(organ, axon)
 	local host_id = Axons.get_id(host, host_axon)
 	Organ._connections:add("host", host_id, listener_id)
@@ -70,12 +75,9 @@ function Organ.static.disconnect(organ, axon, host, host_axon)
 	end
 end
 
-function Organ.initialize(self, stimulation_handlers)
-	self._stimulation_handlers = assert(stimulation_handlers)
-end
 
 function Organ.stimulate(self, axon_name, data)
-	self._stimulation_handlers[axon_name](data, self.fire)
+	self._stimulation_handlers[axon_name](self, data)
 end
 
 function Organ.fire(self, axon_name, data)
@@ -84,8 +86,8 @@ function Organ.fire(self, axon_name, data)
 end
 
 -- example stimulation handler
-function Organ.static.propagate_handler(data, fire)
-	fire("print", data)
+function Organ.static.propagate_handler(self, data)
+	self:fire("print", data)
 end
 
 return Organ

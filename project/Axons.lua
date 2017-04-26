@@ -3,9 +3,8 @@ local Axons = {}
 local axons = {}
 
 local function get_id(organ, axon_name)
-	local id = #axons
-	axons[id] = {organ=organ, name=axon_name}
-	return id
+	table.insert(axons, {organ=organ, name=axon_name})
+	return #axons
 end
 Axons.get_id = Memoize(get_id)
 
