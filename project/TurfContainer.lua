@@ -21,4 +21,16 @@ function TurfContainer.draw()
 	end
 end
 
+function TurfContainer.loadMap(map) 
+	local turfCodes = map.turfCodes
+	
+	for x = 1, #map do
+		for y = 1, #(map[x]) do
+			local turfCode = map[x][y]
+			local turfClass = turfCodes[turfCode]
+			TurfContainer.set(x-1, y-1, turfClass())
+		end
+	end
+end
+
 return TurfContainer
