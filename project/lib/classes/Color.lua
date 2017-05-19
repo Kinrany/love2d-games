@@ -11,6 +11,14 @@ function Color.unpack(self)
 	return self[1], self[2], self[3], self[4]
 end
 
+function Color.update(self, args)
+	local r = args[1] or args.r or self.r
+	local g = args[2] or args.g or self.g
+	local b = args[3] or args.b or self.b
+	local a = args[4] or args.a or args.alpha or self.a
+	return Color(r,g,b,a)
+end
+
 function Color.draw(self)
 	love.graphics.setColor(self:unpack())
 end
