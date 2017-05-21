@@ -10,8 +10,4 @@ function ImageComponent.initialize(self, name)
 	assert(self.image, "Couldn't load image " .. name)
 end
 
-function ImageComponent.draw(self, x, y)
-	love.graphics.draw(self.image, x, y)
-end
-
 return ImageComponent

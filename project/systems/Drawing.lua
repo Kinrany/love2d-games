@@ -13,4 +13,9 @@ function DrawingSystem.process(self, e, dt)
 	love.graphics.draw(image, x * TILE_WIDTH, y * TILE_WIDTH)
 end
 
+DrawingSystem.custom_flags = {
+	update = false,
+	draw = true
+}
+
 return DrawingSystem

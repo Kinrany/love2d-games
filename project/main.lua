@@ -25,11 +25,13 @@ function love.load()
 end
 
 function love.update(dt)
-	--world:update(dt)
+	world:update(dt, function(system)
+		return system.custom_flags.update
+	end)
 end
 
 function love.draw()
-	--turfs.draw()
-	--world:update(dt, function (system) return system == DirectionalDrawingSystem end)
-	world:update(dt)
+	world:update(nil, function(system)
+		return system.custom_flags.draw
+	end)
 end
