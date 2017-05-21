@@ -9,7 +9,7 @@ function DirectionalDrawingSystem.process(self, e, dt)
 	local position = e.position
 	local direction = e.direction
 	
-	local image = directional_image.images[direction.dir]
+	local image = directional_image.images[direction]
 	local x, y = position.x, position.y
 	love.graphics.draw(image, x * TILE_WIDTH, y * TILE_WIDTH)
 end
