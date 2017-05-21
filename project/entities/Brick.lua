@@ -6,7 +6,7 @@ local ImageComponent = require "components/Image"
 local Brick = Class("Brick", Item)
 
 function Brick.initialize(self, x, y)
-	Item.initialize(self, "brick", x, y, "UP")
+	Item.initialize(self, "brick", x, y)
 end
 
 
