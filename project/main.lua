@@ -24,14 +24,6 @@ function love.load()
 	world:addEntity(human)
 end
 
-function love.update(dt)
-	world:update(dt, function(system)
-		return system.custom_flags.update
-	end)
-end
-
 function love.draw()
-	world:update(nil, function(system)
-		return system.custom_flags.draw
-	end)
+	world:update(love.timer.getDelta())
 end

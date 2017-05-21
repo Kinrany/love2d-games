@@ -14,9 +14,4 @@ function DirectionalDrawingSystem.process(self, e, dt)
 	love.graphics.draw(image, x * TILE_WIDTH, y * TILE_WIDTH)
 end
 
-DirectionalDrawingSystem.custom_flags = {
-	update = false,
-	draw = true
-}
-
 return DirectionalDrawingSystem

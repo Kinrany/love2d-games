@@ -33,9 +33,4 @@ function PlayerMovementSystem.process(self, e, dt)
 	end
 end
 
-PlayerMovementSystem.custom_flags = {
-	update = true,
-	draw = false
-}
-
 return PlayerMovementSystem
