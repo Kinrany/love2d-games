@@ -8,9 +8,9 @@ local function add_sprite(name, x, y)
 	return sprite
 end
 
+add_sprite("grass", 0, 0)
 add_sprite("brick", 5, 10)
 add_sprite("human", 8, 6)
-add_sprite("grass", 0, 0)
 
 
 local function draw_all_sprites()
