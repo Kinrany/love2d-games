@@ -12,11 +12,14 @@ add_sprite("brick", 5, 10)
 add_sprite("human", 8, 6)
 add_sprite("grass", 0, 0)
 
-local TILE_WIDTH = 32
 
-function love.draw()
+local function draw_all_sprites()
+	local TILE_WIDTH = 32
 	for sprite, x, y in Sprite:iterAll() do
-		print(sprite.name, x, y)
 		love.graphics.draw(sprite:getImage(), x * TILE_WIDTH, y * TILE_WIDTH)
 	end
+end
+
+function love.draw()
+	draw_all_sprites()
 end
