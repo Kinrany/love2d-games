@@ -1,5 +1,7 @@
-local ImageManager = {}
+local Dir = require "Direction"
 
+
+local ImageManager = {}
 local images = {}
 
 -- provides error message as second return value
@@ -13,6 +15,17 @@ function ImageManager.get(name)
 	images[name] = image
 	return image, error_message
 end
+
+ImageManager.getPack = memoize(function(name)
+	local pack = {}
+	pack.default = ImageManager.get(name .. Dir.default) or ImageManager.get(name) error("No image")
+	
+	for dir in Dir.iter() do
+		pack[tostring(dir)] = ImageManager.get(name .. dir)
+	end
+	
+	return setmetatable(pack, {__index = function(self, key) return self.default end})
+end)
 
 function ImageManager._load(name)
 	return love.graphics.newImage("resources/" .. name .. ".png")

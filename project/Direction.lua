@@ -16,10 +16,12 @@ local mt = {
 	end
 }
 
-add_direction = function(num, str)
+add_direction = function(num, str, dx, dy)
 	local direction = {
 		_num = num,
-		_str = str
+		_str = str,
+		dx = dx,
+		dy = dy
 	}
 	direction = setmetatable(direction, mt)
 	
@@ -34,10 +36,10 @@ get_direction = function(dir)
 	return directions[dir]
 end
 
-add_direction(-1, "left")
-add_direction(0, "front")
-add_direction(1, "right")
-add_direction(2, "back")
+add_direction(-1,  "left", -1,  0)
+add_direction( 0, "front",  0, -1)
+add_direction( 1, "right",  1,  0)
+add_direction( 2,  "back",  0,  1)
 
 local Direction = setmetatable({}, {
 	__index = function(self, key)
@@ -45,5 +47,15 @@ local Direction = setmetatable({}, {
 		return directions[string.lower(key)]
 	end
 })
+
+Direction.default = directions.front
+
+function Direction.iter()
+	local i = -1 - 1
+	return function()
+		i = i + 1
+		return directions[i]
+	end
+end
 
 return Direction
