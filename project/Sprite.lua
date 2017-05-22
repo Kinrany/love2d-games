@@ -5,17 +5,19 @@ local Sprite = class("Sprite")
 
 Sprite.static._world = {}
 Sprite.static._worldAddSprite = function(self, sprite)
-	local x, y = sprite._x, sprite_y
-	if not _world[x] then
-		_world[x] = {}
+	local x, y = sprite._x, sprite._y
+	local w = self._world
+	
+	if not w[x] then
+		w[x] = {}
 	end
-	if not _world[x][y] then
-		_world[x][y] = setmetatable({}, {__mode="k"})
+	if not w[x][y] then
+		w[x][y] = setmetatable({}, {__mode="k"})
 	end
-	_world[x][y][sprite] = true
+	w[x][y][sprite] = true
 end
 Sprite.static_worldDeleteSprite = function(self, sprite)
-	_world[sprite._x][sprite._y][sprite] = nil
+	self._world[sprite._x][sprite._y][sprite] = nil
 end
 Sprite.static._worldMoveSprite = function(self, sprite, new_x, new_y)
 	self:_worldDeleteSprite(sprite)
@@ -24,17 +26,52 @@ Sprite.static._worldMoveSprite = function(self, sprite, new_x, new_y)
 	self:_worldAddSprite(sprite)
 end
 
-function Sprite.initialize(self, args)
-	assert(args, "At least tell me your name!")
+-- creates iterator (xy_table, sprite) -> (next sprite, 'true')
+Sprite.static.iterAt = function(self, x, y)
+	local w = self._world
+	local xy_table = w[x] and w[x][y]
+	if xy_table then
+		return next, xy_table, nil
+	else
+		return function() end
+	end
+end
+
+-- creates iterator () -> (sprite, x, y)
+Sprite.static.iterAll = function(self)
+	local w = self._world
+	local x, x_table = next(w)
+	local y, xy_table = next(x_table or {})
+	local sprite;
+	return function()
+		sprite = next(xy_table or {}, sprite)
+		if not sprite then
+			y, xy_table = next(x_table or {}, y)
+			if not y then
+				x, x_table = next(w, x)
+				if not x then
+					return nil
+				end
+				y, xy_table = next(x_table or {}, y)
+			end
+			sprite = next(xy_table or {}, sprite)
+		end
+		return sprite, x, y
+	end
+end
+
+
+function Sprite.initialize(self, name, x, y, dir, image_name)
+	self.name = assert(name)
+	self._x = x or 0
+	self._y = y or 0
 	
-	self.name = args.name or args.image_name or "Sprite"
-	
-	local image_name = args.image_name or args.name
+	image_name = image_name or name
 	self._image_pack = assert(ImageManager.getPack(image_name))
 	
-	self._x = args.x or 0
-	self._y = args.y or 0
-	self._dir = args.dir or Direction.default
+	self._dir = dir or Direction.default
+	
+	self.class:_worldAddSprite(self)
 end
 
 function Sprite.getX(self)
@@ -62,7 +99,7 @@ function Sprite.turn(self, direction)
 end
 
 function Sprite.getImage(self)
-	return self._image_pack(self._dir)
+	return self._image_pack[self._dir]
 end
 
 return Sprite
