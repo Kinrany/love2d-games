@@ -1,7 +1,10 @@
 local ImageManager = require "ImageManager"
 local Direction = require "Direction"
 
+
+
 local Sprite = class("Sprite")
+
 
 Sprite.static._world = {}
 Sprite.static._worldAddSprite = function(self, sprite)
@@ -25,6 +28,7 @@ Sprite.static._worldMoveSprite = function(self, sprite, new_x, new_y)
 	sprite._y = new_y
 	self:_worldAddSprite(sprite)
 end
+
 
 -- creates iterator (xy_table, sprite) -> (next sprite, 'true')
 Sprite.static.iterAt = function(self, x, y)
@@ -74,6 +78,7 @@ function Sprite.initialize(self, name, x, y, dir, image_name)
 	self.class:_worldAddSprite(self)
 end
 
+
 function Sprite.getX(self)
 	return self._x
 end
@@ -83,23 +88,28 @@ end
 function Sprite.getPos(self)
 	return self._x, self._y
 end
-
 function Sprite.getDir(self)
 	return self._dir
+end
+function Sprite.getImage(self)
+	return self._image_pack[self._dir]
+end
+
+function Sprite.setPos(self, x, y)
+	self.class:_worldMoveSprite(self, x, y)
+end
+function Sprite.setDir(self, direction)
+	self._dir = direction
 end
 
 function Sprite.move(self, direction)
 	local new_x = self._x + direction.dx
 	local new_y = self._y + direction.dy
-	self.class:_worldMoveSprite(sprite, new_x, new_y)
+	self.class:_worldMoveSprite(self, new_x, new_y)
 end
-
 function Sprite.turn(self, direction)
 	self._dir = self._dir + direction
 end
 
-function Sprite.getImage(self)
-	return self._image_pack[self._dir]
-end
 
 return Sprite
