@@ -20,15 +20,15 @@ ImageManager.getPack = memoize(function(name)
 	assert(name)
 	
 	local pack = {}
-	pack.default = ImageManager.get(name .. "_" .. tostring(Dir.default)) 
+	local default = ImageManager.get(name .. "_" .. tostring(Dir.default)) 
 		or ImageManager.get(name) 
 		or error("No image \"" .. name .. "\"")
 	
 	for dir in Dir.iter() do
-		pack[tostring(dir)] = ImageManager.get(name .. "_" .. tostring(dir))
+		pack[dir] = ImageManager.get(name .. "_" .. tostring(dir))
 	end
 	
-	return setmetatable(pack, {__index = function(self, key) return self.default end})
+	return setmetatable(pack, {__index = function(self, key) return default end})
 end)
 
 function ImageManager._load(name)
