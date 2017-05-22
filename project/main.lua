@@ -40,21 +40,26 @@ function love.keypressed(key, scancode, isrepeat)
 	end
 end
 
-local function draw_all_sprites()
-	local TILE_WIDTH = 32
-	for sprite, x, y in Sprite:iterAll() do
-		local image = sprite:getImage()
-		local screen_x = x * TILE_WIDTH
-		local screen_y = y * TILE_WIDTH
+local TILE_WIDTH = 32
+local function draw_sprite(sprite)
+	local image = sprite:getImage()
+	local x, y = sprite:getPos()
+	local screen_x = x * TILE_WIDTH
+	local screen_y = y * TILE_WIDTH
+	love.graphics.draw(image, screen_x, screen_y)
+	
+	-- hack for drawing player above other sprites
+	local hX, hY = human_sprite:getPos()
+	if x == hX and y == hY then
+		local image = human_sprite:getImage()
 		love.graphics.draw(image, screen_x, screen_y)
-		
-		-- hack for drawing player above other sprites
-		local hX, hY = human_sprite:getPos()
-		if x == hX and y == hY then
-			local image = human_sprite:getImage()
-			love.graphics.draw(image, screen_x, screen_y)
-		end
 	end
+end
+
+local function draw_all_sprites()
+	local tmp = __.to_array(Sprite:iterAll())
+	tmp = __.sort(tmp, Sprite.drawOrderBefore)
+	__.each(tmp, draw_sprite)
 end
 
 function love.draw()

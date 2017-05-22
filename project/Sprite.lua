@@ -64,8 +64,23 @@ Sprite.static.iterAll = function(self)
 	end
 end
 
+-- true if a should be drawn before b
+Sprite.static.drawOrderBefore = function(a, b)
+	if a._layer < b._layer then
+		return true
+	elseif a._layer > b._layer then
+		return false
+	elseif a._y < b._y then
+		return true
+	elseif a._y > b._y then
+		return false
+	else
+		return a._x < b._x
+	end
+end
 
-function Sprite.initialize(self, name, x, y, dir, image_name)
+
+function Sprite.initialize(self, name, x, y, dir, layer, image_name)
 	self.name = assert(name)
 	self._x = x or 0
 	self._y = y or 0
@@ -74,6 +89,7 @@ function Sprite.initialize(self, name, x, y, dir, image_name)
 	self._image_pack = assert(ImageManager.getPack(image_name))
 	
 	self._dir = dir or Direction.default
+	self._layer = layer or 0
 	
 	self.class:_worldAddSprite(self)
 end
