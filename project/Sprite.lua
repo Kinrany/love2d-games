@@ -19,7 +19,7 @@ Sprite.static._worldAddSprite = function(self, sprite)
 	end
 	w[x][y][sprite] = true
 end
-Sprite.static_worldDeleteSprite = function(self, sprite)
+Sprite.static._worldDeleteSprite = function(self, sprite)
 	self._world[sprite._x][sprite._y][sprite] = nil
 end
 Sprite.static._worldMoveSprite = function(self, sprite, new_x, new_y)
@@ -78,6 +78,10 @@ function Sprite.initialize(self, name, x, y, dir, image_name)
 	self.class:_worldAddSprite(self)
 end
 
+function Sprite.__tostring(self)
+	return self.name .. " sprite"
+end
+
 
 function Sprite.getX(self)
 	return self._x
@@ -102,10 +106,14 @@ function Sprite.setDir(self, direction)
 	self._dir = direction
 end
 
-function Sprite.move(self, direction)
+function Sprite.moveAbsolute(self, direction)
 	local new_x = self._x + direction.dx
 	local new_y = self._y + direction.dy
 	self.class:_worldMoveSprite(self, new_x, new_y)
+end
+function Sprite.moveRelative(self, relativeDirection)
+	local absolute = self._dir + relativeDirection
+	self:moveAbsolute(absolute)
 end
 function Sprite.turn(self, direction)
 	self._dir = self._dir + direction
